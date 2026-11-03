@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#050510">
 <title>MR INSTAVIP — Elite Admin Panel</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap');
 :root{--bg:#05050d;--panel:#0b0b17;--cyan:#00f5e0;--blue:#00bfff;--purple:#a855ff;--pink:#ff087d;--green:#00ef91;--yellow:#ffd400;--muted:#8c91a8;--line:#25243c}
@@ -30,8 +31,8 @@ textarea{min-height:120px;resize:vertical}button{font-family:Orbitron;cursor:poi
 .btn:hover{transform:translateY(-2px);filter:brightness(1.15)}.btn:active{transform:scale(.98)}
 .btn-main{width:100%;margin-top:22px;padding:20px;background:linear-gradient(100deg,#00bfff,#8b28ff 55%,#ff087d);border:1px solid #b3faff;box-shadow:0 0 24px #00cfff66}
 .btn-save{width:100%;margin-top:22px;background:linear-gradient(100deg,#00e6bb,#00c76d);color:#03140f;box-shadow:0 0 22px #00edb855}
-.socials{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}.social{padding:15px;border-radius:12px;border:0;color:#fff;font:700 16px Rajdhani}.telegram{background:#078fce}.youtube{background:#f00016}
-.search{margin-bottom:20px}.analytics{margin-top:24px}.chart-wrap{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:20px}.donut{width:min(230px,65vw);aspect-ratio:1;border-radius:50%;margin:auto;background:conic-gradient(var(--cyan) 0 100%,#24243b 100%);display:grid;place-items:center;box-shadow:0 0 25px #00f5e055}.donut:before{content:"";width:72%;height:72%;border-radius:50%;background:#090914;grid-area:1/1}.donut div{z-index:1;grid-area:1/1;text-align:center;font:700 27px Orbitron}.donut span{display:block;color:#a9fdf5;font:600 14px Rajdhani}
+.socials{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}.social{padding:15px;border-radius:12px;border:0;color:#fff;font:700 16px Rajdhani;text-decoration:none;text-align:center;display:flex;justify-content:center;align-items:center;gap:8px;}.telegram{background:#078fce}.youtube{background:#f00016}
+.search{margin-bottom:20px}.analytics{margin-top:24px}.chart-wrap{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:20px}.donut{width:min(230px,65vw);aspect-ratio:1;border-radius:50%;margin:auto;background:conic-gradient(var(--green) 0 100%,#24243b 100%);display:grid;place-items:center;box-shadow:0 0 25px #00f5e055;transition:0.5s;}.donut:before{content:"";width:72%;height:72%;border-radius:50%;background:#090914;grid-area:1/1}.donut div{z-index:1;grid-area:1/1;text-align:center;font:700 27px Orbitron}.donut span{display:block;color:#a9fdf5;font:600 14px Rajdhani}
 .legend{display:grid;gap:14px}.legend div{display:flex;align-items:center;gap:10px;font-size:18px}.dot{width:12px;height:12px;border-radius:50%}.legend b{margin-left:auto;font:700 19px Orbitron}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:5;background:#080811ed;border-top:1px solid #29253f;backdrop-filter:blur(16px);display:flex;justify-content:center;padding:9px 10px calc(9px + env(safe-area-inset-bottom));gap:10px}
 .nav{width:min(180px,31vw);padding:8px 4px;border:0;background:transparent;color:#777b91;border-radius:12px;font:700 12px Orbitron;letter-spacing:1px}.nav .ico{display:block;font-size:25px;margin-bottom:5px}.nav.active{color:var(--cyan);background:linear-gradient(180deg,#00f5e015,#00f5e000);text-shadow:0 0 12px var(--cyan)}
@@ -41,66 +42,292 @@ textarea{min-height:120px;resize:vertical}button{font-family:Orbitron;cursor:poi
 </style>
 </head>
 <body>
-<div class="shell">
+
+<!-- LOGIN OVERLAY -->
+<div id="loginView" style="position:fixed;inset:0;background:#030309;z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;">
+    <div style="text-align:center;margin-bottom:30px;">
+        <div style="font-size:40px;filter:drop-shadow(0 0 12px #00dfff);">♛</div>
+        <h1 style="font:800 28px Orbitron;margin:10px 0 5px;text-shadow:0 0 18px #9b37ff;">MR <span style="color:#bd7bff">INSTAVIP</span></h1>
+        <p style="color:var(--cyan);font:600 13px 'Share Tech Mono';letter-spacing:2px;">SECURE ADMIN ACCESS</p>
+    </div>
+    <div style="background:var(--panel);padding:25px;border-radius:16px;border:1px solid #30294c;width:100%;max-width:350px;">
+        <label>ADMIN EMAIL</label>
+        <input type="email" id="loginEmail" placeholder="admin@mrinstavip.com" style="margin-bottom:15px;">
+        <label>PASSCODE</label>
+        <input type="password" id="loginPass" placeholder="********" style="margin-bottom:25px;">
+        <button class="btn btn-main" style="margin-top:0;" onclick="doLogin()" id="loginBtn">INITIALIZE <i class="fas fa-arrow-right"></i></button>
+    </div>
+</div>
+
+<!-- MAIN DASHBOARD -->
+<div class="shell" id="appView" style="display:none;">
 <header>
- <div class="brand"><div class="crown">♛</div><div><h1>MR <span>INSTAVIP</span></h1><div class="sub">— ELITE ADMIN PANEL —</div></div></div>
- <button class="power" title="Sign out" onclick="notify('Demo panel: sign-out is not connected.')">⏻</button>
+ <div class="brand"><div class="crown">♛</div><div><h1>MR <span>INSTAVIP</span></h1><div class="sub" id="userEmail">— CONNECTED —</div></div></div>
+ <button class="power" title="Sign out" onclick="doLogout()"><i class="fas fa-power-off"></i></button>
 </header>
 
 <main>
 <section id="logs" class="page active">
  <div class="search"><input id="search" placeholder="⌕  SEARCH DEVICE / UTR..." oninput="filterStats()"></div>
  <div class="grid stats">
-  <div class="stat" style="--accent:#00cfff"><span class="emoji">▥</span><label>TOTAL DATA</label><strong id="total">1</strong></div>
+  <div class="stat" style="--accent:#00cfff"><span class="emoji">▥</span><label>TOTAL DATA</label><strong id="total">0</strong></div>
   <div class="stat" style="--accent:#ffd400"><span class="emoji">◷</span><label>PENDING</label><strong id="pending">0</strong></div>
-  <div class="stat" style="--accent:#00ef91"><span class="emoji">✓</span><label>APPROVED</label><strong id="approved">1</strong></div>
+  <div class="stat" style="--accent:#00ef91"><span class="emoji">✓</span><label>APPROVED</label><strong id="approved">0</strong></div>
   <div class="stat" style="--accent:#ff087d"><span class="emoji">✕</span><label>REJECTED</label><strong id="rejected">0</strong></div>
  </div>
  <div class="panel analytics">
-  <h2 class="section-title">◔ ANALYTICS DATA <small>OVERVIEW • DEMO VALUES</small></h2>
-  <div class="chart-wrap"><div class="donut"><div id="rate">100%<span>Success Rate</span></div></div>
-   <div class="legend"><div><i class="dot" style="background:#00ef91"></i>Approved <b id="legA">1</b></div><div><i class="dot" style="background:#ffd400"></i>Pending <b id="legP">0</b></div><div><i class="dot" style="background:#ff174f"></i>Rejected <b id="legR">0</b></div></div>
-  </div><p class="note">These are sample dashboard figures. Connect your own authorized data source to show live records.</p>
+  <h2 class="section-title">◔ ANALYTICS DATA <small>LIVE OVERVIEW</small></h2>
+  <div class="chart-wrap"><div class="donut" id="donutChart"><div id="rate">0%<span>Success Rate</span></div></div>
+   <div class="legend"><div><i class="dot" style="background:#00ef91"></i>Approved <b id="legA">0</b></div><div><i class="dot" style="background:#ffd400"></i>Pending <b id="legP">0</b></div><div><i class="dot" style="background:#ff174f"></i>Rejected <b id="legR">0</b></div></div>
+  </div>
+ </div>
+ <div class="panel" style="margin-top:20px;">
+  <h2 class="section-title">▤ PAYMENT LOGS</h2>
+  <div id="tableBody" style="color:#8d91a9;text-align:center;padding:20px;">Connecting...</div>
  </div>
 </section>
 
 <section id="settings" class="page">
  <div class="panel">
   <h2 class="section-title">⚙ CONFIGURATION <small>MANAGE YOUR APP SETTINGS</small></h2>
-  <div class="socials"><button class="social telegram" onclick="notify('Add your Telegram channel URL in your app settings.')">➤ Telegram</button><button class="social youtube" onclick="notify('Add your YouTube channel URL in your app settings.')">▶ YouTube</button></div>
+  <div class="socials">
+    <a href="https://t.me/MrrrPerfect" target="_blank" class="social telegram"><i class="fab fa-telegram-plane"></i> Telegram</a>
+    <a href="http://youtube.com/@Mrr.Perfectt" target="_blank" class="social youtube"><i class="fab fa-youtube"></i> YouTube</a>
+  </div>
   <label>UPI QR CODE IMAGE URL</label><input id="qr" type="url" placeholder="https://your-image-link...">
   <label>PREMIUM PRICE (₹)</label><input id="price" type="number" min="0" placeholder="49">
   <label style="color:#ffd400">📢 BROADCAST MESSAGE</label><textarea id="message" placeholder="Message for app users..."></textarea>
   <button class="btn btn-save" onclick="saveSettings()">▣ SAVE CONFIG</button>
-  <p class="note">Demo mode: settings are saved only in this browser. No message is sent to other users.</p>
  </div>
 </section>
 
 <section id="command" class="page">
  <div class="panel">
-  <h2 class="section-title">›_ COMMAND CENTER (RAW DB)<small>AUTHORIZED DATABASE TEST CONSOLE</small></h2>
-  <p class="note">Enter a database path and valid JSON to preview the data. This standalone HTML does not connect to Firebase or write to a database.</p>
+  <h2 class="section-title">›_ COMMAND CENTER (RAW DB)<small>AUTHORIZED DATABASE CONSOLE</small></h2>
   <label>DATABASE PATH (e.g., config)</label><input id="path" placeholder="my_custom_data">
   <label>JSON DATA</label><textarea id="json" spellcheck="false">{ "status": "active", "version": 1 }</textarea>
-  <button class="btn btn-main" onclick="previewData()">ϟ EXECUTE DATA</button>
+  <button class="btn btn-main" onclick="executeData()">ϟ EXECUTE DATA</button>
   <pre id="preview" style="display:none;white-space:pre-wrap;overflow-wrap:anywhere;background:#030309;border:1px solid #34324b;padding:15px;border-radius:12px;color:#00f5e0;margin-top:18px"></pre>
  </div>
 </section>
 </main>
 </div>
-<nav class="bottom-nav">
+
+<nav class="bottom-nav" id="bottomNav" style="display:none;">
  <button class="nav active" data-page="logs" onclick="showPage('logs',this)"><span class="ico">▤</span>LOGS</button>
  <button class="nav" data-page="settings" onclick="showPage('settings',this)"><span class="ico">⚙</span>SETTINGS</button>
  <button class="nav" data-page="command" onclick="showPage('command',this)"><span class="ico">‹/›</span>COMMAND</button>
 </nav>
 <div id="toast" class="toast" role="status"></div>
-<script>
-function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+
+<!-- FIREBASE LOGIC -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getDatabase, ref, onValue, set, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyD1l7REbXILPoZ4dD1YfE8aLFSWBJLinD4",
+    authDomain: "mrinsta-vip.firebaseapp.com",
+    databaseURL: "https://mrinsta-vip-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "mrinsta-vip",
+    storageBucket: "mrinsta-vip.firebasestorage.app",
+    messagingSenderId: "456771201886",
+    appId: "1:456771201886:android:a03b779a310d720275fdcf"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const auth = getAuth(app);
+
+let allData = {};
+const SECRET_KEY = "3Lv9#Qk!2026$EliteInsta&Zx7";
+
+window.doLogin = function() {
+    const email = document.getElementById('loginEmail').value;
+    const pass = document.getElementById('loginPass').value;
+    const btn = document.getElementById('loginBtn');
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> LOADING...';
+    
+    signInWithEmailAndPassword(auth, email, pass)
+        .catch(err => { 
+            alert("ACCESS DENIED: " + err.message); 
+            btn.innerHTML = 'INITIALIZE <i class="fas fa-arrow-right"></i>'; 
+        });
+};
+
+window.doLogout = function() { signOut(auth); };
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        document.getElementById('loginView').style.display = 'none';
+        document.getElementById('appView').style.display = 'block';
+        document.getElementById('bottomNav').style.display = 'flex';
+        document.getElementById('userEmail').innerText = "● " + user.email;
+        loadData(); loadConfig();
+    } else {
+        document.getElementById('loginView').style.display = 'flex';
+        document.getElementById('appView').style.display = 'none';
+        document.getElementById('bottomNav').style.display = 'none';
+        document.getElementById('loginBtn').innerHTML = 'INITIALIZE <i class="fas fa-arrow-right"></i>';
+    }
+});
+
+function loadConfig() {
+    onValue(ref(db, 'config'), (snapshot) => {
+        const data = snapshot.val();
+        if(data) {
+            document.getElementById('price').value = data.price || "";
+            document.getElementById('qr').value = data.upi_qr || "";
+            document.getElementById('message').value = data.custom_message || "";
+        }
+    });
+}
+
+window.saveSettings = function() {
+    const price = document.getElementById('price').value;
+    const qrUrl = document.getElementById('qr').value;
+    const msg = document.getElementById('message').value;
+    set(ref(db, 'config'), {
+        price: parseInt(price),
+        upi_qr: qrUrl,
+        custom_message: msg,
+        currency: "INR",
+        product_name: "MR INSTAPREMIUM"
+    }).then(() => {
+        notify("✅ SETTINGS SAVED TO DATABASE");
+    }).catch(e => {
+        notify("❌ ERROR: " + e.message);
+    });
+};
+
+function loadData() {
+    onValue(ref(db, 'requests'), (snapshot) => {
+        allData = snapshot.val() || {};
+        render();
+    });
+}
+
+window.filterStats = function() { render(); }
+
+function render() {
+    const query = document.getElementById('search').value.toLowerCase();
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+
+    let total = 0, pending = 0, approved = 0, rejected = 0;
+
+    if (!allData || Object.keys(allData).length === 0) {
+        tbody.innerHTML = '<div style="text-align:center;color:#555;">NO DATA FOUND</div>';
+        updateStats(0, 0, 0, 0); return;
+    }
+
+    let tableHtml = '<div style="overflow-x:auto;"><table style="width:100%;text-align:left;font-size:14px;color:#ccc;"><thead><tr style="color:#777;font-size:10px;border-bottom:1px solid #333;"><th style="padding:10px;">DEVICE / UTR</th><th style="padding:10px;">STATUS</th><th style="padding:10px;">ACTION</th></tr></thead><tbody>';
+
+    Object.keys(allData).reverse().forEach(dcode => {
+        const req = allData[dcode];
+        total++;
+        let status = req.s || "pending";
+        if (status === 'pending') pending++;
+        else if (status === 'approved') approved++;
+        else if (status === 'rejected') rejected++;
+
+        if(query && !dcode.toLowerCase().includes(query) && !(req.u && req.u.includes(query))) return;
+
+        let badgeColor = status === 'approved' ? '#00ef91' : (status === 'rejected' ? '#ff087d' : '#ffd400');
+        
+        let actionHtml = '';
+        if (status === 'pending') {
+            actionHtml = `<button onclick="window.approve('${dcode}')" style="background:#00ef91;color:#000;border:none;padding:6px 10px;border-radius:4px;font-weight:bold;margin-right:4px;font-family:Orbitron;font-size:10px;cursor:pointer;">APP</button>
+            <button onclick="window.reject('${dcode}')" style="background:transparent;color:#ff087d;border:1px solid #ff087d;padding:6px 10px;border-radius:4px;font-weight:bold;font-family:Orbitron;font-size:10px;cursor:pointer;">REJ</button>`;
+        } else {
+            actionHtml = `<button onclick="window.removeData('${dcode}')" style="background:#333;color:#fff;border:none;padding:6px 10px;border-radius:4px;font-size:10px;cursor:pointer;">DEL</button>`;
+        }
+
+        tableHtml += `<tr style="border-bottom:1px solid #1a1a24;">
+            <td style="padding:10px;">
+                <b style="color:#fff;font-size:14px;">${dcode}</b>
+                <div style="font-size:10px;color:#666;margin-top:2px;">${req.t ? new Date(req.t * 1000).toLocaleString() : ''}</div>
+                <div style="font-family:monospace;color:#ffd400;font-size:11px;margin-top:2px;">UTR: ${req.u || 'N/A'}</div>
+                ${req.key ? `<div style="font-family:monospace;color:#00ef91;font-size:10px;margin-top:4px;background:#000;padding:4px;border-left:2px solid #00ef91;">${req.key}</div>` : ''}
+            </td>
+            <td style="padding:10px;"><span style="background:${badgeColor}22;color:${badgeColor};border:1px solid ${badgeColor}44;padding:4px 8px;border-radius:4px;font-size:10px;font-weight:bold;">${status.toUpperCase()}</span></td>
+            <td style="padding:10px;">${actionHtml}</td>
+        </tr>`;
+    });
+
+    tableHtml += '</tbody></table></div>';
+    if (total === 0) tableHtml = '<div style="text-align:center;color:#555;">NO MATCHING RECORDS</div>';
+    tbody.innerHTML = tableHtml;
+
+    updateStats(total, pending, approved, rejected);
+}
+
+function updateStats(t, p, a, r) {
+    document.getElementById('total').innerText = t;
+    document.getElementById('pending').innerText = p;
+    document.getElementById('approved').innerText = a;
+    document.getElementById('rejected').innerText = r;
+    
+    let rate = t > 0 ? Math.round((a / t) * 100) : 0;
+    document.getElementById('rate').innerHTML = rate + '%<span>Success Rate</span>';
+    document.getElementById('legA').innerText = a;
+    document.getElementById('legP').innerText = p;
+    document.getElementById('legR').innerText = r;
+    document.getElementById('donutChart').style.background = `conic-gradient(var(--green) 0 ${rate}%, var(--pink) ${rate}% ${rate + (p/t)*100}%, var(--yellow) ${rate + (p/t)*100}% 100%)`;
+    if(t===0) document.getElementById('donutChart').style.background = `conic-gradient(#24243b 0 100%)`;
+}
+
+window.approve = async function(dcode) {
+    const timestamp = Date.now().toString();
+    const rawString = dcode + "|" + timestamp;
+    const msgBuffer = new TextEncoder().encode(SECRET_KEY + rawString);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.slice(0, 8).map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+    const vipKey = hashHex + timestamp;
+
+    if(confirm(`APPROVE ${dcode}?\n\nKEY: ${vipKey}`)) {
+        update(ref(db, 'requests/' + dcode), { s: "approved", key: vipKey });
+    }
+};
+
+window.reject = function(dcode) {
+    if(confirm("REJECT?")) update(ref(db, 'requests/' + dcode), { s: "rejected" });
+};
+
+window.removeData = function(dcode) {
+    if(confirm("DELETE?")) remove(ref(db, 'requests/' + dcode));
+};
+
+window.executeData = function() {
+    const path = document.getElementById('path').value;
+    const data = document.getElementById('json').value;
+    if(!path) return alert("Path required!");
+    try {
+        const parsed = JSON.parse(data);
+        set(ref(db, path), parsed).then(() => {
+            alert("✅ DATA WRITTEN TO DATABASE");
+        });
+    } catch(e) { alert("INVALID JSON"); }
+};
+
+window.showPage = function(id, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav').forEach(n => n.classList.remove('active'));
+    btn.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+};
+
 let toastTimer;
-function notify(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.display='none',2600);}
-function saveSettings(){const data={qr:document.getElementById('qr').value,price:document.getElementById('price').value,message:document.getElementById('message').value};try{localStorage.setItem('mrInstavipDemoSettings',JSON.stringify(data));notify('Settings saved on this device.');}catch(e){notify('Could not save settings in this browser.');}}
-function previewData(){const path=document.getElementById('path').value.trim();const raw=document.getElementById('json').value;const out=document.getElementById('preview');if(!path){notify('Please enter a database path.');return;}try{const parsed=JSON.parse(raw);out.style.display='block';out.textContent='PREVIEW ONLY — no database write\\nPath: '+path+'\\n\\n'+JSON.stringify(parsed,null,2);notify('Valid JSON. Preview created.');}catch(e){out.style.display='block';out.textContent='Invalid JSON: '+e.message;notify('Please check your JSON format.');}}
-function filterStats(){const q=document.getElementById('search').value.trim();if(q)notify('Search is a visual demo. Connect your records to enable filtering.');}
-try{const saved=JSON.parse(localStorage.getItem('mrInstavipDemoSettings')||'{}');if(saved.qr)document.getElementById('qr').value=saved.qr;if(saved.price)document.getElementById('price').value=saved.price;if(saved.message)document.getElementById('message').value=saved.message;}catch(e){}
+window.notify = function(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.style.display = 'none', 2600);
+};
 </script>
-</body></html>
+</body>
+</html>
