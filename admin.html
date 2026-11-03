@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050510">
+<title>MR INSTAVIP — Elite Admin Panel</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap');
+:root{--bg:#05050d;--panel:#0b0b17;--cyan:#00f5e0;--blue:#00bfff;--purple:#a855ff;--pink:#ff087d;--green:#00ef91;--yellow:#ffd400;--muted:#8c91a8;--line:#25243c}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#21104b 0%,#090817 40%,#030309 85%);color:#f7f7ff;font-family:Rajdhani,Arial,sans-serif;min-height:100vh;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;background:linear-gradient(120deg,transparent 0 45%,#a855ff 46%,transparent 47% 100%),linear-gradient(60deg,transparent 0 72%,#00d9ff 73%,transparent 74%);background-size:460px 460px}
+.shell{max-width:1120px;margin:auto;padding:24px 18px 105px;position:relative}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 4px 22px;border-bottom:1px solid #28253d;margin-bottom:24px}
+.brand{display:flex;align-items:center;gap:14px}.crown{font-size:34px;filter:drop-shadow(0 0 12px #00dfff)}
+h1{font:800 clamp(21px,4vw,34px) Orbitron,sans-serif;margin:0;letter-spacing:1px;text-shadow:0 0 18px #9b37ff}
+h1 span{color:#bd7bff}.sub{color:var(--cyan);font:600 14px 'Share Tech Mono';letter-spacing:1px;margin-top:5px}
+.power{border:1px solid #ff1684;color:#ff1684;background:#130d20;border-radius:50%;width:54px;height:54px;font-size:25px;cursor:pointer;box-shadow:0 0 18px #ff087d55}
+.page{display:none;animation:appear .3s ease}.page.active{display:block}@keyframes appear{from{opacity:.3;transform:translateY(8px)}to{opacity:1;transform:none}}
+.panel{background:linear-gradient(145deg,#101020ee,#080811f5);border:1px solid #30294c;border-radius:20px;padding:clamp(18px,3vw,30px);box-shadow:0 0 0 1px #ffffff05,inset 0 0 35px #7028a00c,0 16px 45px #0009;position:relative;overflow:hidden}
+.panel:after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(130deg,#00eaff66,transparent 28%,#a855ff66 72%,transparent);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.section-title{font:600 clamp(18px,3vw,25px) Orbitron;color:var(--cyan);margin:0 0 20px;padding-bottom:17px;border-bottom:1px dashed #34324b;letter-spacing:1px}
+.section-title small{display:block;font:600 13px Rajdhani;color:#aeb2c9;margin-top:5px;letter-spacing:1px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.stats{margin:20px 0}.stat{padding:18px;border-radius:16px;background:#0c0d1b;border:1px solid #242943;min-height:112px;position:relative}.stat:before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:4px;border-radius:8px;background:var(--accent);box-shadow:0 0 14px var(--accent)}.stat label{display:block;color:#a8abc0;font:700 14px Orbitron;letter-spacing:1px}.stat strong{display:block;font:800 38px Orbitron;margin-top:9px}.stat .emoji{position:absolute;right:17px;top:22px;font-size:24px;color:var(--accent)}
+label{display:block;color:#aeb1c5;font:600 14px 'Share Tech Mono';letter-spacing:1.4px;margin:17px 0 8px}
+input,textarea{width:100%;background:#030309;color:#eafaff;border:1px solid #414058;border-radius:12px;padding:16px;font:600 16px 'Share Tech Mono';outline:none;transition:.2s}
+input:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #00e5d522,0 0 18px #00e5d522}
+textarea{min-height:120px;resize:vertical}button{font-family:Orbitron;cursor:pointer}
+.btn{border:0;border-radius:13px;padding:16px 20px;font:700 16px Orbitron;letter-spacing:.5px;color:#fff;background:linear-gradient(100deg,#087dff,#8c22ff,#fa087f);box-shadow:0 0 22px #8c22ff55;transition:.2s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.15)}.btn:active{transform:scale(.98)}
+.btn-main{width:100%;margin-top:22px;padding:20px;background:linear-gradient(100deg,#00bfff,#8b28ff 55%,#ff087d);border:1px solid #b3faff;box-shadow:0 0 24px #00cfff66}
+.btn-save{width:100%;margin-top:22px;background:linear-gradient(100deg,#00e6bb,#00c76d);color:#03140f;box-shadow:0 0 22px #00edb855}
+.socials{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}.social{padding:15px;border-radius:12px;border:0;color:#fff;font:700 16px Rajdhani}.telegram{background:#078fce}.youtube{background:#f00016}
+.search{margin-bottom:20px}.analytics{margin-top:24px}.chart-wrap{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:20px}.donut{width:min(230px,65vw);aspect-ratio:1;border-radius:50%;margin:auto;background:conic-gradient(var(--cyan) 0 100%,#24243b 100%);display:grid;place-items:center;box-shadow:0 0 25px #00f5e055}.donut:before{content:"";width:72%;height:72%;border-radius:50%;background:#090914;grid-area:1/1}.donut div{z-index:1;grid-area:1/1;text-align:center;font:700 27px Orbitron}.donut span{display:block;color:#a9fdf5;font:600 14px Rajdhani}
+.legend{display:grid;gap:14px}.legend div{display:flex;align-items:center;gap:10px;font-size:18px}.dot{width:12px;height:12px;border-radius:50%}.legend b{margin-left:auto;font:700 19px Orbitron}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:5;background:#080811ed;border-top:1px solid #29253f;backdrop-filter:blur(16px);display:flex;justify-content:center;padding:9px 10px calc(9px + env(safe-area-inset-bottom));gap:10px}
+.nav{width:min(180px,31vw);padding:8px 4px;border:0;background:transparent;color:#777b91;border-radius:12px;font:700 12px Orbitron;letter-spacing:1px}.nav .ico{display:block;font-size:25px;margin-bottom:5px}.nav.active{color:var(--cyan);background:linear-gradient(180deg,#00f5e015,#00f5e000);text-shadow:0 0 12px var(--cyan)}
+.toast{position:fixed;left:50%;bottom:95px;transform:translateX(-50%);background:#101a24;border:1px solid var(--cyan);color:#dffffb;padding:12px 18px;border-radius:10px;box-shadow:0 0 20px #00e5d544;z-index:10;display:none;font-weight:700}
+.note{color:#8d91a9;font-size:13px;line-height:1.5;margin-top:12px}
+@media(max-width:650px){.shell{padding:14px 12px 100px}.grid{gap:12px}.stat{min-height:100px;padding:15px}.stat strong{font-size:30px}.chart-wrap{grid-template-columns:1fr}.legend{max-width:260px;margin:auto;width:100%}header{margin-bottom:17px}.panel{border-radius:16px}.social{font-size:14px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header>
+ <div class="brand"><div class="crown">♛</div><div><h1>MR <span>INSTAVIP</span></h1><div class="sub">— ELITE ADMIN PANEL —</div></div></div>
+ <button class="power" title="Sign out" onclick="notify('Demo panel: sign-out is not connected.')">⏻</button>
+</header>
+
+<main>
+<section id="logs" class="page active">
+ <div class="search"><input id="search" placeholder="⌕  SEARCH DEVICE / UTR..." oninput="filterStats()"></div>
+ <div class="grid stats">
+  <div class="stat" style="--accent:#00cfff"><span class="emoji">▥</span><label>TOTAL DATA</label><strong id="total">1</strong></div>
+  <div class="stat" style="--accent:#ffd400"><span class="emoji">◷</span><label>PENDING</label><strong id="pending">0</strong></div>
+  <div class="stat" style="--accent:#00ef91"><span class="emoji">✓</span><label>APPROVED</label><strong id="approved">1</strong></div>
+  <div class="stat" style="--accent:#ff087d"><span class="emoji">✕</span><label>REJECTED</label><strong id="rejected">0</strong></div>
+ </div>
+ <div class="panel analytics">
+  <h2 class="section-title">◔ ANALYTICS DATA <small>OVERVIEW • DEMO VALUES</small></h2>
+  <div class="chart-wrap"><div class="donut"><div id="rate">100%<span>Success Rate</span></div></div>
+   <div class="legend"><div><i class="dot" style="background:#00ef91"></i>Approved <b id="legA">1</b></div><div><i class="dot" style="background:#ffd400"></i>Pending <b id="legP">0</b></div><div><i class="dot" style="background:#ff174f"></i>Rejected <b id="legR">0</b></div></div>
+  </div><p class="note">These are sample dashboard figures. Connect your own authorized data source to show live records.</p>
+ </div>
+</section>
+
+<section id="settings" class="page">
+ <div class="panel">
+  <h2 class="section-title">⚙ CONFIGURATION <small>MANAGE YOUR APP SETTINGS</small></h2>
+  <div class="socials"><button class="social telegram" onclick="notify('Add your Telegram channel URL in your app settings.')">➤ Telegram</button><button class="social youtube" onclick="notify('Add your YouTube channel URL in your app settings.')">▶ YouTube</button></div>
+  <label>UPI QR CODE IMAGE URL</label><input id="qr" type="url" placeholder="https://your-image-link...">
+  <label>PREMIUM PRICE (₹)</label><input id="price" type="number" min="0" placeholder="49">
+  <label style="color:#ffd400">📢 BROADCAST MESSAGE</label><textarea id="message" placeholder="Message for app users..."></textarea>
+  <button class="btn btn-save" onclick="saveSettings()">▣ SAVE CONFIG</button>
+  <p class="note">Demo mode: settings are saved only in this browser. No message is sent to other users.</p>
+ </div>
+</section>
+
+<section id="command" class="page">
+ <div class="panel">
+  <h2 class="section-title">›_ COMMAND CENTER (RAW DB)<small>AUTHORIZED DATABASE TEST CONSOLE</small></h2>
+  <p class="note">Enter a database path and valid JSON to preview the data. This standalone HTML does not connect to Firebase or write to a database.</p>
+  <label>DATABASE PATH (e.g., config)</label><input id="path" placeholder="my_custom_data">
+  <label>JSON DATA</label><textarea id="json" spellcheck="false">{ "status": "active", "version": 1 }</textarea>
+  <button class="btn btn-main" onclick="previewData()">ϟ EXECUTE DATA</button>
+  <pre id="preview" style="display:none;white-space:pre-wrap;overflow-wrap:anywhere;background:#030309;border:1px solid #34324b;padding:15px;border-radius:12px;color:#00f5e0;margin-top:18px"></pre>
+ </div>
+</section>
+</main>
+</div>
+<nav class="bottom-nav">
+ <button class="nav active" data-page="logs" onclick="showPage('logs',this)"><span class="ico">▤</span>LOGS</button>
+ <button class="nav" data-page="settings" onclick="showPage('settings',this)"><span class="ico">⚙</span>SETTINGS</button>
+ <button class="nav" data-page="command" onclick="showPage('command',this)"><span class="ico">‹/›</span>COMMAND</button>
+</nav>
+<div id="toast" class="toast" role="status"></div>
+<script>
+function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+let toastTimer;
+function notify(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.display='none',2600);}
+function saveSettings(){const data={qr:document.getElementById('qr').value,price:document.getElementById('price').value,message:document.getElementById('message').value};try{localStorage.setItem('mrInstavipDemoSettings',JSON.stringify(data));notify('Settings saved on this device.');}catch(e){notify('Could not save settings in this browser.');}}
+function previewData(){const path=document.getElementById('path').value.trim();const raw=document.getElementById('json').value;const out=document.getElementById('preview');if(!path){notify('Please enter a database path.');return;}try{const parsed=JSON.parse(raw);out.style.display='block';out.textContent='PREVIEW ONLY — no database write\\nPath: '+path+'\\n\\n'+JSON.stringify(parsed,null,2);notify('Valid JSON. Preview created.');}catch(e){out.style.display='block';out.textContent='Invalid JSON: '+e.message;notify('Please check your JSON format.');}}
+function filterStats(){const q=document.getElementById('search').value.trim();if(q)notify('Search is a visual demo. Connect your records to enable filtering.');}
+try{const saved=JSON.parse(localStorage.getItem('mrInstavipDemoSettings')||'{}');if(saved.qr)document.getElementById('qr').value=saved.qr;if(saved.price)document.getElementById('price').value=saved.price;if(saved.message)document.getElementById('message').value=saved.message;}catch(e){}
+</script>
+</body></html>
